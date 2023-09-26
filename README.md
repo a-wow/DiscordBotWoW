@@ -2,7 +2,7 @@
 Null
 python 3.10.11
 
-pip install discord.py
+pip install discord.py <br>
 pip install mysql-connector-python
 
 <a href="">
