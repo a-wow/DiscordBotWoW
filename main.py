@@ -153,7 +153,7 @@ async def on_message(message):
         return
 
     author_id = message.author.id
-    # Get the context of the message
+    
     ctx = await bot.get_context(message)
     
     await update_experience(ctx, author_id, random.randint(5, 15))
@@ -185,7 +185,7 @@ async def character(ctx, name: str):
         embed.add_field(name="Пол", value=char_info['gender'], inline=True)
         embed.add_field(name="Уровень", value=char_info['level'], inline=True)
         embed.add_field(name="Всего убийств", value=char_info['totalkills'], inline=True)
-        embed.set_image(url="https://i.postimg.cc/W3hnpgDw/K0-SAHtr2-jk.webp")  # Background image
+        embed.set_image(url="https://i.postimg.cc/W3hnpgDw/K0-SAHtr2-jk.webp")  
 
         await ctx.send(embed=embed)
     else:
