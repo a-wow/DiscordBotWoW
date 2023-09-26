@@ -1,6 +1,10 @@
 # DiscordBotWoW
 Null
 python 3.10.11
+
+pip install discord.py
+pip install mysql-connector-python
+
 <a href="">
     <img src="/IMG_20230926_101758.jpg" width="100%"/>
   </a>
