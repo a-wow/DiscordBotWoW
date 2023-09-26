@@ -5,6 +5,9 @@ python 3.10.11
 pip install discord.py <br>
 pip install mysql-connector-python
 
+OAuth2-General <br>
+https://discord.com/oauth2/authorize?client_id=APPLICATION_ID&scope=bot&permissions=8
+
 <a href="">
     <img src="/IMG_20230926_101758.jpg" width="100%"/>
   </a>
