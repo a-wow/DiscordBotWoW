@@ -17,3 +17,5 @@ pip install mysql-connector-python
   <a href="">
     <img src="/IMG_20230926_101905.jpg" width="100%"/>
   </a>
+  <img src="/IMG_20230926_111437.jpg" width="100%"/>
+  </a>
