@@ -21,7 +21,7 @@ race_names = {
     6: 'Таурен',
     7: 'Гном',
     8: 'Тролль',
-    10: 'Кровавый эльф',
+    10: 'Эльф крови',
     11: 'Дреней'
 }
 
@@ -31,6 +31,8 @@ class_names = {
     3: 'Охотник',
     4: 'Разбойник',
     5: 'Жрец',
+    6: 'Рыцарь смерти',
+    7: 'Шаман',
     8: 'Маг',
     9: 'Чернокнижник',
     11: 'Друид'
@@ -44,8 +46,50 @@ gender_names = {
 DB_HOST = "HOST"
 DB_USER = "USER"
 DB_PASSWORD = "PASS"
-DB_DATABASE = "CHARACTERS"
+DB_DATABASE = "CHARACTERS1"
+DB_DATABASE_2 = "CHARACTERS2"
 
+async def get_character_info_2(name: str) -> Optional[dict]:
+    conn = mysql.connector.connect(user=DB_USER, password=DB_PASSWORD, host=DB_HOST, database=DB_DATABASE_2)
+    cursor = conn.cursor()
+    cursor.execute(f"SELECT * FROM characters WHERE name = '{name}';")
+
+    row = cursor.fetchone()
+    cursor.close()
+    conn.close()
+
+    if row:
+        return {
+            'guid': row[0],
+            'account': row[1],
+            'name': row[2],
+            'race': race_names[row[3]],
+            'class': class_names[row[4]],
+            'gender': gender_names[row[5]],
+            'level': row[6],
+            'totalkills': row[49],
+            'online': row[15]
+        }
+    else:
+        return None
+
+@bot.command()
+async def charblizz(ctx, name: str):
+    """Отображает информацию о персонажах из второго игрового мира"""
+    char_info = await get_character_info_2(name)
+    if char_info:
+        embed = discord.Embed(title=f"Персонаж blizzlike: {char_info['name']}", color=0x00ff00)
+        embed.add_field(name="Раса", value=char_info['race'], inline=True)
+        embed.add_field(name="Класс", value=char_info['class'], inline=True)
+        embed.add_field(name="Пол", value=char_info['gender'], inline=True)
+        embed.add_field(name="Уровень", value=char_info['level'], inline=True)
+        embed.add_field(name="Всего убийств", value=char_info['totalkills'], inline=True)
+        embed.set_image(url="https://i.postimg.cc/W3hnpgDw/K0-SAHtr2-jk.webp")
+
+        await ctx.send(embed=embed)
+    else:
+        await ctx.send(f"Персонаж '{name}' во втором игровом мире не найден.")
+        
 async def get_character_info(name: str) -> Optional[dict]:
     conn = mysql.connector.connect(user=DB_USER, password=DB_PASSWORD, host=DB_HOST, database=DB_DATABASE)
     cursor = conn.cursor()
@@ -179,7 +223,7 @@ async def character(ctx, name: str):
     """Отображаем информацию о символах"""
     char_info = await get_character_info(name)
     if char_info:
-        embed = discord.Embed(title=f"Персонаж: {char_info['name']}", color=0x00ff00)
+        embed = discord.Embed(title=f"Персонаж mini-ris: {char_info['name']}", color=0x00ff00)
         embed.add_field(name="Раса", value=char_info['race'], inline=True)
         embed.add_field(name="Класс", value=char_info['class'], inline=True)
         embed.add_field(name="Пол", value=char_info['gender'], inline=True)
@@ -216,7 +260,7 @@ async def botinfo(ctx):
     # Дополнительная информация о боте
     embed.add_field(name="Автор", value="null", inline=True)
     embed.add_field(name="Версия", value="0.1", inline=True)
-    embed.add_field(name="Пример использования", value="!character ИмяПерсонажа", inline=False)
+    embed.add_field(name="Пример использования", value="!character или !charblizz ИмяПерсонажа", inline=False)
 
     # Добавляем фоновое изображение
     embed.set_image(url="https://i.postimg.cc/W3hnpgDw/K0-SAHtr2-jk.webp")
@@ -227,8 +271,8 @@ async def botinfo(ctx):
 async def commands(ctx):
     """Отображает доступные команды для бота"""
     embed = discord.Embed(title="Доступные команды", description="Список доступных команд для использования Extazy WoW Information bot", color=0x00ff00)
-    embed.add_field(name="!character <ИмяПерсонажа>", value="Отображает информацию о персонаже", inline=False)
-    embed.add_field(name="!online", value="Показать онлайн-игроков", inline=False)
+    embed.add_field(name="!character <ИмяПерсонажа>", value="Отображает информацию о персонаже игрового мира mini-ris", inline=False)
+    embed.add_field(name="!charblizz <ИмяПерсонажа>", value="Отображает информацию о персонаже игрового мира blizzlike", inline=False)
     embed.add_field(name="!botinfo", value="Отображает информацию о боте", inline=False)
     embed.add_field(name="!commands", value="Отображает список доступных команд", inline=False)
 
@@ -237,5 +281,4 @@ async def commands(ctx):
 
     await ctx.send(embed=embed)
 
-bot.run("TOKEN")
-      
+bot.run("TEST")
